@@ -4,10 +4,16 @@ import React from "react";
 import styles from "./index.module.scss";
 
 function Arts() {
+  const [artwork, setArtwork] = React.useState<string>();
+
+  const onPublished = (url: string) => {
+    setArtwork(url);
+  };
+
   return (
     <div className={styles.container}>
-      <Create />
-      <List />
+      <Create onPublished={onPublished} />
+      <List publishedArt={artwork} />
     </div>
   );
 }

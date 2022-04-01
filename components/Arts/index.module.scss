@@ -1,5 +1,13 @@
+@import "../../styles/variables.scss";
+
 .container {
   display: flex;
   justify-content: space-between;
   padding: 50px 20px;
+}
+
+@media (max-width: $media-max-width) {
+  .container {
+    flex-direction: column;
+  }
 }

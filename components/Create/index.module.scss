@@ -1,3 +1,5 @@
+@import "../../styles/variables.scss";
+
 .container {
   width: 45%;
   &__title {
@@ -22,13 +24,20 @@
     align-items: center;
     cursor: pointer;
 
+    &__image {
+      width: auto;
+      max-width: 50%;
+      height: 90%;
+      object-fit: contain;
+    }
+
     &__target {
       display: flex;
-      justify-content: center;
+      justify-content: space-around;
       align-items: center;
-      flex-direction: column;
       width: 100% !important;
       height: 100%;
+      padding: 20px;
     }
 
     &__title {
@@ -39,6 +48,7 @@
     }
 
     &__input {
+      width: 0.1px;
       visibility: hidden;
     }
   }
@@ -48,5 +58,12 @@
     p {
       font-size: 20px;
     }
+  }
+}
+
+@media (max-width: $media-max-width) {
+  .container {
+    width: 100%;
+    margin-bottom: 50px;
   }
 }

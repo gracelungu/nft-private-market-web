@@ -1,18 +1,74 @@
-import Input from "components/common/Input";
 import React from "react";
 import { useRef } from "react";
+import { create } from "ipfs-http-client";
+import Input from "components/common/Input";
 import styles from "./index.module.scss";
 import { FileDrop } from "react-file-drop";
 import Button from "components/common/Button";
+import { useState } from "react";
+import { ethers } from "ethers";
+import { abi, privateMarketAddress } from "constant";
+import { useEffect } from "react";
 
-function Create() {
+type Props = {
+  onPublished: (url: string) => void;
+};
+
+const Create: React.FC<Props> = ({ onPublished }) => {
+  const [fileURL, setFileURL] = useState<string>();
+  const [loading, setLoading] = useState(false);
+  const [artName, setArtName] = useState();
+  const [artURL, setArtURL] = useState<string>();
+  const [file, setFile] = useState();
+
   const fileInputRef = useRef(null);
 
   const onFileDrop = (files: any) => {
     onFiles(files);
   };
 
-  const onFiles = (files: any) => {};
+  const onFiles = (files: any) => {
+    console.log(files[0]);
+    setFile(files[0]);
+  };
+
+  const onFileInputChange = (event: any) => {
+    const { files } = event.target;
+    onFiles(files);
+  };
+
+  const onTargetClick = () => {
+    fileInputRef?.current?.click();
+  };
+
+  const onPublish = async () => {
+    setLoading(true);
+
+    if (file) {
+      const client = create("https://ipfs.infura.io:5001/api/v0");
+      const published = await client.add(file);
+      const url = `https://ipfs.infura.io/ipfs/${published.path}`;
+
+      setArtURL(url);
+      await mintNewNFT(url);
+      onPublished(url);
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window !== undefined && file) {
+      setFileURL(URL.createObjectURL(file));
+    }
+  }, [file]);
+
+  const mintNewNFT = async (url: string) => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(privateMarketAddress, abi, provider);
+    const contractSigner = contract.connect(signer);
+    await contractSigner.createToken(url);
+    setLoading(false);
+  };
 
   return (
     <div className={styles.container}>
@@ -21,31 +77,49 @@ function Create() {
         Publish to the Binance smart chain
       </div>
 
-      <Input label="Artwork name" placeholder="Artwork title" />
+      <Input
+        label="Artwork name"
+        placeholder="Name"
+        value={artName}
+        onChange={({ target: { value } }) => setArtName(value)}
+      />
+
       <FileDrop
         className={styles.container__upload}
         targetClassName={styles.container__upload__target}
-        // onTargetClick={onTargetClick}
+        onTargetClick={onTargetClick}
         onDrop={onFileDrop}
         dropEffect="move"
       >
+        {fileURL && (
+          <img
+            src={fileURL}
+            className={styles.container__upload__image}
+            alt="illustration"
+          />
+        )}
         <span className={styles.container__upload__title}>
           Click or drag and drop to upload your NFT image
         </span>
 
         <input
-          // onChange={onFileInputChange}
+          onChange={onFileInputChange}
           ref={fileInputRef}
           type="file"
           className={styles.container__upload__input}
           inputProps={{ accept: "image/*" }}
-          multiple
         />
       </FileDrop>
 
-      <Button title="Publish" className={styles.container__button} />
+      <Button
+        title="Publish"
+        loading={loading}
+        className={styles.container__button}
+        disabled={!file || !artName}
+        onClick={onPublish}
+      />
     </div>
   );
-}
+};
 
 export default Create;
