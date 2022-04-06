@@ -3,6 +3,7 @@ import Button from "components/common/Button";
 import { abi, privateMarketAddress } from "constant";
 import { ethers } from "ethers";
 import getAccount from "helpers/getAccount";
+import Router from "next/router";
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -39,7 +40,6 @@ const PublicList: React.FC<Props> = ({ publishedArt }) => {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(privateMarketAddress, abi, signer);
-      console.log({ tokenId });
       await contract.purchaseToken(tokenId);
 
       setLoading(false);
@@ -68,6 +68,7 @@ const PublicList: React.FC<Props> = ({ publishedArt }) => {
                 src={art[2]}
                 className={styles.container__list__item__image}
                 alt="illustration"
+                onClick={() => Router.push("/a/1")}
               />
 
               <div className={styles.container__list__item__name}>{art[1]}</div>
