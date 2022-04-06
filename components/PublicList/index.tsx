@@ -34,6 +34,21 @@ const PublicList: React.FC<Props> = ({ publishedArt }) => {
     getArtworks();
   }, [publishedArt]);
 
+  const purchaseNFT = async (tokenId: any) => {
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(privateMarketAddress, abi, signer);
+      console.log({ tokenId });
+      await contract.purchaseToken(tokenId);
+
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+      console.log(e);
+    }
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.container__title}>Community NFT Artworks</div>
@@ -64,6 +79,7 @@ const PublicList: React.FC<Props> = ({ publishedArt }) => {
               <Button
                 className={styles.container__list__item__buy}
                 title="BUY"
+                onClick={() => purchaseNFT(art[3])}
               />
             </div>
           ))}
