@@ -8,10 +8,12 @@ type Props = {
 
 const Layout: React.FC<Props> = ({ children }) => {
   return (
-    <div className="">
+    <>
       <Header />
-      <div className={styles.container}>{children}</div>
-    </div>
+      <div className={styles.wrapper}>
+        <div className={styles.container}>{children}</div>
+      </div>
+    </>
   );
 };
 

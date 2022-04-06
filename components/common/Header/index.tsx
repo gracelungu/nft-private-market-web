@@ -25,7 +25,7 @@ function Header() {
     <div className={styles.container}>
       <Link href="/">
         <a>
-          <span className={styles.container__logo}>TOP-NOTCH</span>
+          <span className={styles.container__logo}>NFT COMMUNITY</span>
         </a>
       </Link>
       <Button

@@ -1,15 +1,13 @@
 import Layout from "components/common/Layout";
-import Landing from "components/Landing";
 import PublicList from "components/PublicList";
-import type { NextPage } from "next";
+import React from "react";
 
-const Home: NextPage = () => {
+function Public() {
   return (
     <Layout>
-      <Landing />
       <PublicList />
     </Layout>
   );
-};
+}
 
-export default Home;
+export default Public;

@@ -1,4 +1,5 @@
 import ArtLoader from "components/common/ArtLoader";
+import Button from "components/common/Button";
 import { abi, privateMarketAddress } from "constant";
 import { ethers } from "ethers";
 import getAccount from "helpers/getAccount";
@@ -11,7 +12,7 @@ type Props = {
   publishedArt?: string;
 };
 
-const List: React.FC<Props> = ({ publishedArt }) => {
+const PublicList: React.FC<Props> = ({ publishedArt }) => {
   const [loading, setLoading] = useState(false);
   const [arts, setArts] = useState<any[]>([]);
 
@@ -20,18 +21,11 @@ const List: React.FC<Props> = ({ publishedArt }) => {
 
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const contract = new ethers.Contract(privateMarketAddress, abi, provider);
-    const account = await getAccount();
-    const tokens = await contract.getAddressTokens(account);
+    const tokensData = await contract.getAllTokenData();
 
-    const artData = tokens.map(async (token: string) => {
-      const data = await contract.getTokenData(token);
-      return data;
-    });
+    console.log(tokensData);
 
-    const allArts = await Promise.all(artData);
-    const artsData = allArts.map((art) => art[0]);
-
-    setArts(artsData.reverse());
+    setArts(tokensData);
 
     setLoading(false);
   };
@@ -42,9 +36,9 @@ const List: React.FC<Props> = ({ publishedArt }) => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.container__title}>All your artworks</div>
+      <div className={styles.container__title}>Community NFT Artworks</div>
       <div className={styles.container__subtitle}>
-        Published to the community smart contract
+        Purchase one of our community NFT to join our community
       </div>
 
       <div className={styles.container__list}>
@@ -66,6 +60,11 @@ const List: React.FC<Props> = ({ publishedArt }) => {
               <div className={styles.container__list__item__price}>
                 {ethers.utils.formatUnits(art[0], "ether")} ETH
               </div>
+
+              <Button
+                className={styles.container__list__item__buy}
+                title="BUY"
+              />
             </div>
           ))}
       </div>
@@ -73,4 +72,4 @@ const List: React.FC<Props> = ({ publishedArt }) => {
   );
 };
 
-export default List;
+export default PublicList;

@@ -123,6 +123,16 @@ const PRIVATE_MARKET_ABI = [
         name: "tokenURI",
         type: "string",
       },
+      {
+        internalType: "uint256",
+        name: "price",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "name",
+        type: "string",
+      },
     ],
     name: "createToken",
     outputs: [
@@ -132,7 +142,7 @@ const PRIVATE_MARKET_ABI = [
         type: "uint256",
       },
     ],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function",
   },
   {
@@ -149,6 +159,36 @@ const PRIVATE_MARKET_ABI = [
         internalType: "uint256[]",
         name: "",
         type: "uint256[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getAllTokenData",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "price",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "image",
+            type: "string",
+          },
+        ],
+        internalType: "struct PrivateMarket.TokenData[]",
+        name: "",
+        type: "tuple[]",
       },
     ],
     stateMutability: "view",
@@ -181,6 +221,42 @@ const PRIVATE_MARKET_ABI = [
         internalType: "uint256[]",
         name: "",
         type: "uint256[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "getTokenData",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "price",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "image",
+            type: "string",
+          },
+        ],
+        internalType: "struct PrivateMarket.TokenData[]",
+        name: "",
+        type: "tuple[]",
       },
     ],
     stateMutability: "view",
@@ -240,6 +316,24 @@ const PRIVATE_MARKET_ABI = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "buyer",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "purchaseToken",
+    outputs: [],
+    stateMutability: "payable",
     type: "function",
   },
   {

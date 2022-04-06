@@ -15,9 +15,11 @@ type Props = {
 };
 
 const Create: React.FC<Props> = ({ onPublished }) => {
+  const [error, setError] = useState<string>();
   const [fileURL, setFileURL] = useState<string>();
   const [loading, setLoading] = useState(false);
   const [artName, setArtName] = useState();
+  const [artPrice, setArtPrice] = useState();
   const [artURL, setArtURL] = useState<string>();
   const [file, setFile] = useState();
 
@@ -62,26 +64,47 @@ const Create: React.FC<Props> = ({ onPublished }) => {
   }, [file]);
 
   const mintNewNFT = async (url: string) => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const contract = new ethers.Contract(privateMarketAddress, abi, provider);
-    const contractSigner = contract.connect(signer);
-    await contractSigner.createToken(url);
-    setLoading(false);
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(privateMarketAddress, abi, provider);
+      const contractSigner = contract.connect(signer);
+      await contractSigner.createToken(
+        url,
+        ethers.utils.parseEther(artPrice),
+        artName
+      );
+      setLoading(false);
+    } catch (e) {
+      setError(
+        "You do not belong to the community yet. You must own one of our NFTs to publish."
+      );
+      setLoading(false);
+    }
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.container__title}>Create new NFT artwork</div>
       <div className={styles.container__subtitle}>
-        Publish to the Binance smart chain
+        Publish to the community smart contract
       </div>
+
+      <div className={styles.container__error}>{error}</div>
 
       <Input
         label="Artwork name"
         placeholder="Name"
         value={artName}
         onChange={({ target: { value } }) => setArtName(value)}
+      />
+
+      <Input
+        label="Artwork price"
+        placeholder="Price in ETH"
+        type="number"
+        value={artPrice}
+        onChange={({ target: { value } }) => setArtPrice(value)}
       />
 
       <FileDrop
@@ -115,7 +138,7 @@ const Create: React.FC<Props> = ({ onPublished }) => {
         title="Publish"
         loading={loading}
         className={styles.container__button}
-        disabled={!file || !artName}
+        disabled={!file || !artName || !artPrice}
         onClick={onPublish}
       />
     </div>

@@ -14,11 +14,4 @@ const ArtLoader = (props: any) => {
   );
 };
 
-ArtLoader.metadata = {
-  name: "baptiste fkt",
-  github: "baptistefkt",
-  description: "Three column grid layout",
-  filename: "Grid",
-};
-
 export default ArtLoader;
