@@ -51,6 +51,10 @@ const Create: React.FC<Props> = ({ onPublished }) => {
       const published = await client.add(file);
       const url = `https://ipfs.infura.io/ipfs/${published.path}`;
 
+      console.log(url, " ===== IPFS URL");
+
+      setLoading(false);
+
       setArtURL(url);
       await mintNewNFT(url);
       onPublished(url);
