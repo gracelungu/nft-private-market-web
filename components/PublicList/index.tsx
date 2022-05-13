@@ -24,8 +24,6 @@ const PublicList: React.FC<Props> = ({ publishedArt }) => {
     const contract = new ethers.Contract(privateMarketAddress, abi, provider);
     const tokensData = await contract.getAllTokenData();
 
-    console.log(tokensData);
-
     setArts(tokensData);
 
     setLoading(false);
