@@ -43,6 +43,7 @@ const PublicList: React.FC<Props> = ({ publishedArt }) => {
       setLoading(false);
     } catch (e) {
       setLoading(false);
+      alert("You must be logged in to purchase this NFT");
       console.log(e);
     }
   };
