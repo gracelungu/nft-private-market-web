@@ -25,7 +25,7 @@ function Header() {
     <div className={styles.container}>
       <Link href="/">
         <a>
-          <span className={styles.container__logo}>NFTGATE</span>
+          <span className={styles.container__logo}>NFTGATE (Ropsten Testnet)</span>
         </a>
       </Link>
       <Button
